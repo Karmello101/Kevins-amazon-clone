@@ -1,8 +1,18 @@
+import firebase from "firebase";
 
-var admin = require("firebase-admin");
+const firebaseConfig = {
+  apiKey: "AIzaSyDNuxOwUkr1Tfma0CRhJzWNI4cHsGPU9us",
+  authDomain: "kevins--clone.firebaseapp.com",
+  projectId: "kevins--clone",
+  storageBucket: "kevins--clone.appspot.com",
+  messagingSenderId: "238830002889",
+  appId: "1:238830002889:web:30c98bed4006273441a318",
+  measurementId: "G-CDSSV11GRQ"
+};
 
-var serviceAccount = require("path/to/serviceAccountKey.json");
+const firebaseApp = firebase.initializeApp(firebaseConfig);
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
+const db = firebaseApp.firestore();
+const auth = firebase.auth();
+
+export { db , auth };
