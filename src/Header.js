@@ -7,7 +7,7 @@ import { useStateValue } from './StateProvider';
 
 function Header() {
 
-    const [state, dispatch] = useStateValue();
+    const [{cart}, dispatch] = useStateValue();
     return (
         <div className='header'>
             <Link to="/">
@@ -21,10 +21,12 @@ function Header() {
                 <SearchIcon className="header__searchIcon" />
             </div>
         <div className="header__nav">
+            <Link to='/login'>
                 <div className="header__option">
                   <span className="header__optionLineOne">Hello Guest</span>
                   <span className="header__optionLineTwo">Sign In</span>
                 </div>
+            </Link>
                 <div className="header__option">
                 <span className="header__optionLineOne">Returns</span>
                 <span className="header__optionLineTwo">& Orders</span>
@@ -37,7 +39,7 @@ function Header() {
                 <Link to="/Checkout">
                  <div className="header__optionCart">
                   <ShoppingCartIcon />
-                  <span className="header__optionLineTwo header__cartCount">0</span>
+                  <span className="header__optionLineTwo header__cartCount">{cart?.length}</span>
                  </div>
                 </Link>
          </div>
