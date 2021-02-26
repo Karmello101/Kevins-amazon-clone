@@ -1,4 +1,4 @@
-import React, { useState, useEffect }from 'react'
+import React, { useState, useEffect } from 'react';
 import CheckoutProduct from './CheckoutProduct';
 import './Payment.css';
 import { useStateValue } from './StateProvider';
@@ -6,43 +6,46 @@ import { Link, useHistory } from 'react-router-dom';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import CurrencyFormat from 'react-currency-format';
 import { getCartTotal } from './reducer';
+import axios from './axios';
 
 function Payment() {
     const [{ cart ,user }, dispatch] = useStateValue();
+    const history = useHistory();
 
     const stripe = useStripe();
     const elements = useElements();
 
     const [succeeded, setSucceeded] = useState(false);
     const [processing, setProcessing] = useState("");
-    const[error, setError] = useState(null);
+    const [error, setError] = useState(null);
     const [disabled, setDisabled] = useState(true);
-    const [clientSecret, setClientSecret] = useState(true);
+    const [clientSecret, setClientSecret] = useState('');
 
     useEffect(() => {
         const getClientSecret = async () => {
             const response = await axios({
                 method: 'post',
-                url: `/payments/create?total=${getCartTotal(cart) * 100}`
+                url: `/payment/create?total=${getCartTotal(cart) * 100}`
             });
             setClientSecret(response.data.clientSecret)
         }
         getClientSecret();
     }, [cart])
-
-    const handleSubmit = async (event) => {
+        console.log('The Secret is', clientSecret)
+    
+        const handleSubmit = async(event) => {
         event.preventDefault();
         setProcessing(true);
 
         const payload = await stripe.confirmCardPayment(clientSecret, {
             payment_method: {
-                card: elements.getElement(CardElement)
+                card: elements.getElement(CardElement),
             }
         }).then(({ paymentIntent }) => {
             setSucceeded(true);
             setError(null);
             setProcessing(false);
-        
+
             history.replace('/orders')
         })
     }
