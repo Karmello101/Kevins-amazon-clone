@@ -24,8 +24,7 @@ function Payment() {
     useEffect(() => {
         const getClientSecret = async () => {
             const response = await axios({
-                method: 'post',
-                url: `/payment/create?total=${getCartTotal(cart) * 100}`
+                
             });
             setClientSecret(response.data.clientSecret)
         }
@@ -108,9 +107,11 @@ function Payment() {
                             thousandSeparator={true}
                             prefix={'$'}
                             />
-                            <button disabled={processing || disabled || succeeded}>
+                            <Link to='/orders'>
+                            <button disabled={!stripe}>
                                 <span>{processing ? <p>Processing</p> : "Buy Now"}</span>
                             </button>
+                            </Link>
                         </div>
 
                         {error && <div>{error}</div>}
